@@ -26,7 +26,7 @@ Es un sitio 100 % estático: no necesita compilación ni servidor propio.
 
 1. Abre la URL en **Safari**.
 2. Toca el botón **Compartir** (cuadrado con flecha) → **Agregar a pantalla de inicio**.
-3. Queda como app con el ícono "Hub ♥", a pantalla completa y funciona sin internet.
+3. Queda como app con su ícono, a pantalla completa y funciona sin internet.
 
 ## Actualizar
 
