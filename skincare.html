@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f7f8f7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mi Hub">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<title>Skincare · Mi Hub</title>
+<style>
+:root{color-scheme:light;--bg:#f7f8f7;--fg:#1b2526;--sub:#687577;--line:#e4e9e7;--brand:#276b62;--light:#e6f2ed;--warn:#faefe7}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.48 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input{font:inherit}button{cursor:pointer}main{max-width:700px;margin:auto;padding:24px 16px 65px}h1{font-size:25px;letter-spacing:-.8px;margin:0}h2{font-size:17px;margin:0}.sub{color:var(--sub);font-size:13px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:23px}.pill{border:1px solid var(--line);background:white;border-radius:12px;padding:9px 13px;color:var(--fg)}.pill.primary{background:var(--brand);color:white;border-color:var(--brand);font-weight:650}.start{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:15px}.start label{font-size:12px;color:var(--sub)}input[type=date]{background:white;color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:9px;font-size:14px}.panel{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden}.calhead{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 10px;gap:10px}.calhead strong{font-size:17px}.nav{border:0;background:#f4f6f5;border-radius:10px;width:36px;height:36px;font-size:22px;color:var(--fg)}.weekdays,.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;padding:0 10px}.weekdays span{text-align:center;font-size:11px;color:var(--sub);padding:7px 0}.calendar{padding-bottom:12px}.day{position:relative;min-height:60px;border:1px solid transparent;border-radius:11px;background:transparent;text-align:left;padding:7px 4px 5px 8px;display:flex;flex-direction:column;justify-content:space-between;color:var(--fg)}.day:not(.active){color:#a6aeac}.day.inplan{background:#f5f8f6}.day.today{box-shadow:inset 0 0 0 1px var(--brand)}.day.selected{background:var(--brand);color:white}.daynum{font-size:13px;font-weight:550}.marks{display:flex;gap:3px;align-items:center;min-height:13px}.dot{width:5px;height:5px;background:#93aba5;border-radius:50%}.day.selected .dot{background:#ddf4e9}.todaymark{font-size:9px;letter-spacing:.1px}.details{margin-top:15px}.detailshead{padding:18px 18px 13px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.chip{font-size:11px;background:var(--light);color:var(--brand);padding:4px 9px;border-radius:20px;white-space:nowrap}.section{margin:0 12px 12px;border:1px solid var(--line);border-radius:13px;overflow:hidden}details summary{list-style:none;cursor:pointer}details summary::-webkit-details-marker{display:none}.section>summary{padding:13px 14px;display:flex;justify-content:space-between;align-items:center;font-weight:650}.chevron:after{content:'⌄';color:var(--sub);font-size:20px;line-height:1}details[open]>summary .chevron:after{content:'⌃'}.product{border-top:1px solid #eff1f0}.product>summary{padding:12px 14px;display:flex;align-items:center;gap:9px;font-size:14px}.product .chevron{margin-left:auto}.product p{margin:0;padding:0 14px 13px 36px;font-size:13px;color:#596769}.idx{width:17px;height:17px;border-radius:50%;display:grid;place-items:center;background:#eef3f1;font-size:10px;color:#46675f;flex-shrink:0}.hint{border-top:1px solid var(--line);padding:11px 17px;color:var(--sub);font-size:12px}.off{padding:3px 17px 19px;color:var(--sub);font-size:14px}.legend{margin:11px 4px 0;font-size:12px;color:var(--sub)}.legend b{color:var(--brand)}main{padding-top:calc(env(safe-area-inset-top) + 14px);padding-bottom:calc(env(safe-area-inset-bottom) + 65px)}.back{display:inline-flex;align-items:center;gap:4px;color:var(--brand);text-decoration:none;font-weight:600;font-size:15px;margin-bottom:12px;-webkit-tap-highlight-color:transparent}.back span{font-size:24px;line-height:1;margin-top:-2px}@media(max-width:390px){main{padding:calc(env(safe-area-inset-top) + 12px) 10px calc(env(safe-area-inset-bottom) + 50px)}.calendar,.weekdays{gap:2px;padding-left:7px;padding-right:7px}.day{min-height:54px;padding:5px}.start{align-items:flex-start}.calhead{padding:12px}.detailshead{padding:15px 13px 12px}h1{font-size:22px}}
+</style>
+</head>
+<body><main>
+<a class="back" href="./"><span>‹</span> Inicio</a>
+<div class="top"><div><h1>Mi rutina facial</h1><div class="sub">Calendario de tratamiento · Frente</div></div><button class="pill primary" id="todayBtn">Hoy</button></div>
+<div class="start"><label for="startDate">Fecha de inicio<br><span class="sub">Día 1 del tratamiento</span></label><input type="date" id="startDate" value="2026-11-12"></div>
+<div class="panel"><div class="calhead"><button class="nav" id="prev" aria-label="Mes anterior">‹</button><strong id="monthLabel"></strong><button class="nav" id="next" aria-label="Mes siguiente">›</button></div><div class="weekdays"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div><div class="calendar" id="calendar"></div></div>
+<div class="legend"><b>•</b> Los puntos indican días con activos (adapaleno o Benzac). Toca un día para ver tu rutina.</div>
+<div class="panel details"><div class="detailshead"><div><h2 id="dayTitle"></h2><div class="sub" id="dayMeta"></div></div><span class="chip" id="stage"></span></div><div id="routine"></div></div>
+</main>
+<script>
+(() => {
+ const pad=n=>String(n).padStart(2,'0');
+ const dateKey=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+ const parse=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d,12)};
+ const today=()=>{const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate(),12)};
+ const add=(d,n)=>{const t=new Date(d);t.setDate(t.getDate()+n);return t};
+ const diff=(a,b)=>Math.round((Date.UTC(a.getFullYear(),a.getMonth(),a.getDate())-Date.UTC(b.getFullYear(),b.getMonth(),b.getDate()))/86400000);
+ const titleDate=d=>new Intl.DateTimeFormat('es-CL',{weekday:'long',day:'numeric',month:'long'}).format(d);
+ const products={
+  neolucid:['Neolucid · loción limpiadora syndet','Masajea suavemente sobre la piel húmeda durante 20–30 segundos y enjuaga con agua tibia. No frotes ni uses cepillos.'],
+  hydro:['Neutrogena Hydro Boost Water Gel','Aplica una capa fina sobre la frente limpia. Si tu piel lo tolera bien, úsalo mañana y noche.'],
+  sun:['Eucerin Oil Control FPS 50+','Aplica generosamente en rostro y frente como último paso de la mañana. Reaplica cada 2 horas si estás al aire libre o tras sudar.'],
+  adap:['Adapal 0,1% · adapaleno gel','Por la noche, con la piel completamente seca, distribuye una capa muy fina sobre toda la frente; evita párpados, labios, comisuras y piel lesionada. No lo uses solo encima de una espinilla.'],
+  benz:['Benzac 5% · peróxido de benzoilo','Por la mañana, aplica una capa MUY fina sobre la frente seca. El 5% puede irritar más: reduce la frecuencia si aparece ardor o descamación. Evita ojos y cejas; puede decolorar telas y cabello.']
+ };
+ function plan(d){const k=diff(d,parse(start.value));if(k<0)return {k,week:0,adap:false,benz:false};const week=Math.floor(k/7)+1; const dow=k%7;let a=false,b=false;
+  if(week<=2){a=[0,2,4].includes(dow);b=week===2&&[1,5].includes(dow)}
+  else if(week<=4){a=[0,2,4,6].includes(dow);b=[1,3,5].includes(dow)}
+  else if(week<=8){a=true;b=[1,3,5].includes(dow)}
+  else {a=true;b=[0,2,4].includes(dow)}
+  return {k,week,adap:a,benz:b};
+ }
+ let selected=today(),view=new Date(selected.getFullYear(),selected.getMonth(),1,12);
+ const start=document.getElementById('startDate');
+ try{const saved=localStorage.getItem('facial-start-date');if(saved&&/^\d{4}-\d\d-\d\d$/.test(saved))start.value=saved}catch(e){}
+ const cal=document.getElementById('calendar');
+ function renderCalendar(){const ml=new Intl.DateTimeFormat('es-CL',{month:'long',year:'numeric'}).format(view);document.getElementById('monthLabel').textContent=ml.charAt(0).toUpperCase()+ml.slice(1);cal.replaceChildren();const first=new Date(view.getFullYear(),view.getMonth(),1,12);const startOffset=(first.getDay()+6)%7;const days=new Date(view.getFullYear(),view.getMonth()+1,0).getDate();const cells=Math.ceil((startOffset+days)/7)*7;
+  for(let i=0;i<cells;i++){const d=add(first,i-startOffset),p=plan(d),btn=document.createElement('button');btn.type='button';btn.className='day';if(d.getMonth()===view.getMonth())btn.classList.add('active');if(p.k>=0)btn.classList.add('inplan');if(dateKey(d)===dateKey(today()))btn.classList.add('today');if(dateKey(d)===dateKey(selected))btn.classList.add('selected');btn.setAttribute('aria-label',titleDate(d));btn.innerHTML=`<span class="daynum">${d.getDate()}</span><span class="marks">${p.adap?'<i class="dot"></i>':''}${p.benz?'<i class="dot"></i>':''}${dateKey(d)===dateKey(today())?'<span class="todaymark">hoy</span>':''}</span>`;btn.addEventListener('click',()=>{selected=d;view=new Date(d.getFullYear(),d.getMonth(),1,12);render()});cal.append(btn)}
+ }
+ function line(key,i){const [name,info]=products[key];return `<details class="product"><summary><span class="idx">${i+1}</span><span>${name}</span><span class="chevron"></span></summary><p>${info}</p></details>`}
+ function section(title,keys){return `<details class="section" open><summary>${title}<span class="chevron"></span></summary>${keys.map(line).join('')}</details>`}
+ function renderDay(){const p=plan(selected);document.getElementById('dayTitle').textContent=titleDate(selected);document.getElementById('dayMeta').textContent=p.k<0?'Antes del inicio':`Día ${p.k+1} · Semana ${p.week}`;document.getElementById('stage').textContent=p.k<0?'Sin tratamiento':p.week<=2?'Adaptación':p.week<=4?'Progresión':p.week<=8?'Consolidación':'Mantención';const root=document.getElementById('routine');if(p.k<0){root.innerHTML='<div class="off">Tu tratamiento comienza el '+titleDate(parse(start.value))+'.</div>';return}
+  const morning=['neolucid'];if(p.benz)morning.push('benz');morning.push('hydro','sun');const night=['neolucid'];if(p.adap)night.push('adap');night.push('hydro');root.innerHTML=section('☀ Mañana',morning)+section('☾ Noche',night)+(p.week<=8?'<div class="hint">Avanza solo si tu piel tolera bien los activos. Si hay irritación importante, vuelve a la frecuencia anterior.</div>':'');
+ }
+ function render(){renderCalendar();renderDay()}
+ document.getElementById('prev').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()-1,1,12);render()};
+ document.getElementById('next').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1,12);render()};
+ document.getElementById('todayBtn').onclick=()=>{selected=today();view=new Date(selected.getFullYear(),selected.getMonth(),1,12);render()};
+ start.addEventListener('change',()=>{if(!start.value)return;try{localStorage.setItem('facial-start-date',start.value)}catch(e){}render()});render();
+ if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+})();
+</script></body></html>

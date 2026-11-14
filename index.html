@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f7f8f7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mi Hub">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<title>Mi Hub</title>
+<style>
+:root{color-scheme:light;--bg:#f7f8f7;--fg:#1b2526;--sub:#687577;--line:#e4e9e7;--brand:#276b62;--light:#e6f2ed}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.48 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
+main{min-height:100%;max-width:560px;margin:auto;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 34px) 18px calc(env(safe-area-inset-bottom) + 22px)}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--brand);text-transform:uppercase;margin:0 0 6px}
+h1{font-size:30px;letter-spacing:-1px;line-height:1.1;margin:0}
+.date{color:var(--sub);font-size:14px;margin-top:6px}
+.grid{display:grid;gap:14px;margin-top:28px}
+.tile{display:flex;align-items:center;gap:16px;padding:20px 18px;background:#fff;border:1px solid var(--line);border-radius:20px;color:inherit;text-decoration:none;transition:transform .12s ease,box-shadow .12s ease}
+.tile:active{transform:scale(.98);box-shadow:0 0 0 3px var(--light)}
+.icon{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;font-size:30px;flex-shrink:0;background:var(--light)}
+.tile h2{font-size:18px;margin:0;letter-spacing:-.3px}
+.tile p{margin:2px 0 0;color:var(--sub);font-size:13px}
+.arrow{margin-left:auto;color:#a6b2af;font-size:26px;line-height:1}
+.love{margin-top:auto;padding-top:40px;text-align:center;color:var(--brand);font-weight:650;font-size:15px}
+.love span{display:inline-block;animation:beat 1.6s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.25)}30%{transform:scale(1)}45%{transform:scale(1.18)}}
+@media (prefers-reduced-motion:reduce){.love span{animation:none}}
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Mi Hub</p>
+  <h1 id="greeting">Hola</h1>
+  <div class="date" id="today"></div>
+
+  <nav class="grid">
+    <a class="tile" href="ejercicio.html">
+      <div class="icon" aria-hidden="true">💪</div>
+      <div><h2>Ejercicio</h2><p>Calistenia · Full Body A / B / C</p></div>
+      <span class="arrow" aria-hidden="true">›</span>
+    </a>
+    <a class="tile" href="skincare.html">
+      <div class="icon" aria-hidden="true">🧴</div>
+      <div><h2>Skincare</h2><p id="skinInfo">Rutina facial · Calendario</p></div>
+      <span class="arrow" aria-hidden="true">›</span>
+    </a>
+  </nav>
+
+  <footer class="love">Yo amo a mi polola <span>❤️</span></footer>
+</main>
+<script>
+(() => {
+  const now = new Date();
+  const h = now.getHours();
+  document.getElementById('greeting').textContent = h < 6 ? 'Buenas noches' : h < 13 ? 'Buenos días' : h < 20 ? 'Buenas tardes' : 'Buenas noches';
+  const f = new Intl.DateTimeFormat('es-CL', {weekday:'long', day:'numeric', month:'long'}).format(now);
+  document.getElementById('today').textContent = f.charAt(0).toUpperCase() + f.slice(1);
+
+  // Pequeño resumen de skincare: día del tratamiento si ya hay fecha de inicio guardada
+  try {
+    const s = localStorage.getItem('facial-start-date') || '2026-11-12';
+    const [y, m, d] = s.split('-').map(Number);
+    const k = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(y, m - 1, d)) / 86400000);
+    if (k >= 0) document.getElementById('skinInfo').textContent = `Rutina facial · Día ${k + 1}, semana ${Math.floor(k / 7) + 1}`;
+  } catch (e) {}
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  }
+})();
+</script>
+</body>
+</html>
