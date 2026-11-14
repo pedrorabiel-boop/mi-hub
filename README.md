@@ -2,7 +2,7 @@
 
 App personal (PWA) con mis rutinas:
 
-- **Ejercicio** — Calistenia Full Body A / B / C (`ejercicio.html`)
+- **Ejercicio** — Calendario para registrar entrenamientos (rutinas A/B/C, caminata, trote) y las 3 rutinas desplegables (`ejercicio.html`)
 - **Skincare** — Calendario de rutina facial (`skincare.html`)
 
 Es un sitio 100 % estático: no necesita compilación ni servidor propio.

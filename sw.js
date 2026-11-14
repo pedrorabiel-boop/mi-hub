@@ -1,7 +1,7 @@
 // Service worker: permite abrir la app sin conexión.
 // Usa "red primero": con internet siempre ves la última versión; sin internet, la copia guardada.
 // Si agregas archivos nuevos, súmalos a ASSETS y sube el número de versión.
-const CACHE = 'mi-hub-v2';
+const CACHE = 'mi-hub-v3';
 const ASSETS = [
   './',
   'index.html',

@@ -43,7 +43,7 @@ h1{font-size:30px;letter-spacing:-1px;line-height:1.1;margin:0}
   <nav class="grid">
     <a class="tile" href="ejercicio.html">
       <div class="icon" aria-hidden="true">💪</div>
-      <div><h2>Ejercicio</h2><p>Calistenia · Full Body A / B / C</p></div>
+      <div><h2>Ejercicio</h2><p id="workoutInfo">Registro · Calistenia A / B / C</p></div>
       <span class="arrow" aria-hidden="true">›</span>
     </a>
     <a class="tile" href="skincare.html">
@@ -69,6 +69,21 @@ h1{font-size:30px;letter-spacing:-1px;line-height:1.1;margin:0}
     const [y, m, d] = s.split('-').map(Number);
     const k = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(y, m - 1, d)) / 86400000);
     if (k >= 0) document.getElementById('skinInfo').textContent = `Rutina facial · Día ${k + 1}, semana ${Math.floor(k / 7) + 1}`;
+  } catch (e) {}
+
+  // Resumen de ejercicio: último registro
+  try {
+    const log = JSON.parse(localStorage.getItem('workout-log-v1')) || {};
+    const key = Object.keys(log).filter(k => /^\d{4}-\d\d-\d\d$/.test(k) && Array.isArray(log[k]) && log[k].length).sort().pop();
+    if (key) {
+      const e = log[key][log[key].length - 1];
+      const [y, m, d] = key.split('-').map(Number);
+      const n = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(y, m - 1, d)) / 86400000);
+      const when = n === 0 ? 'hoy' : n === 1 ? 'ayer' : `hace ${n} días`;
+      const fmt = v => Number(v).toLocaleString('es-CL', {maximumFractionDigits: 2});
+      const what = e.t === 'walk' ? `Caminata ${fmt(e.v)} min` : e.t === 'run' ? `Trote ${fmt(e.v)} km` : ['A', 'B', 'C'].includes(e.t) ? `Rutina ${e.t}` : null;
+      if (what) document.getElementById('workoutInfo').textContent = `Último: ${what} · ${when}`;
+    }
   } catch (e) {}
 
   if ('serviceWorker' in navigator) {
