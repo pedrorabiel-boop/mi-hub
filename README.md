@@ -3,6 +3,7 @@
 App personal (PWA) con mis rutinas:
 
 - **Ejercicio** — Calendario para registrar entrenamientos (rutinas A/B/C, caminata, trote) y las 3 rutinas desplegables (`ejercicio.html`)
+- **Entrenar** — Timer guiado: 5 min de movilidad, ejercicios, transiciones y descansos (`entrenar.html`). Las rutinas están en `routines.js`.
 - **Skincare** — Calendario de rutina facial (`skincare.html`)
 
 Es un sitio 100 % estático: no necesita compilación ni servidor propio.

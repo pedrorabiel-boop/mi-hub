@@ -26,12 +26,13 @@ h1{font-size:25px;letter-spacing:-.8px;margin:0}h2{font-size:17px;margin:0}
 .panel{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden}
 
 /* Resumen */
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px}
 .stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 11px}
 .stat small{display:block;font-size:11px;color:var(--sub);line-height:1.25}
 .stat b{display:block;font-size:18px;letter-spacing:-.4px;margin-top:3px}
 .stat.hl{background:var(--brand);border-color:var(--brand);color:#fff}.stat.hl small{color:#cfe8e0}
 
+.trainbtn{display:flex;align-items:center;gap:12px;background:var(--brand);color:#fff;text-decoration:none;border-radius:16px;padding:13px 15px;margin-bottom:14px}.trainbtn:active{filter:brightness(.92)}.trainbtn .play{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:14px;flex-shrink:0}.trainbtn b{display:block;font-size:16px}.trainbtn small{display:block;font-size:12px;color:#cfe8e0}.trainbtn .arr{margin-left:auto;font-size:24px;opacity:.7}
 /* Calendario */
 .calhead{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 10px;gap:10px}.calhead strong{font-size:17px}
 .nav{border:0;background:#f4f6f5;border-radius:10px;width:36px;height:36px;font-size:22px}
@@ -118,7 +119,6 @@ details.card>summary{list-style:none;cursor:pointer}details.card>summary::-webki
   h1{font-size:22px}
   .stats{gap:6px}.stat{padding:9px 8px}.stat b{font-size:16px}
 }
-@media(max-width:340px){.stats{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body><main>
@@ -126,6 +126,7 @@ details.card>summary{list-style:none;cursor:pointer}details.card>summary::-webki
 <div class="top"><div><h1>Ejercicio</h1><div class="sub">Registro de entrenamientos · Calistenia A / B / C</div></div><button class="pill primary" id="todayBtn">Hoy</button></div>
 
 <div class="stats" id="stats"></div>
+<a class="trainbtn" href="entrenar.html"><span class="play">▶</span><span><b>Entrenar</b><small id="trainSub">Timer guiado de la rutina</small></span><span class="arr">›</span></a>
 
 <div class="panel">
   <div class="calhead"><button class="nav" id="prev" aria-label="Mes anterior">‹</button><strong id="monthLabel"></strong><button class="nav" id="next" aria-label="Mes siguiente">›</button></div>
@@ -175,42 +176,10 @@ details.card>summary{list-style:none;cursor:pointer}details.card>summary::-webki
 </div>
 </main>
 
+<script src="routines.js"></script>
 <script>
 (() => {
- // ---------- Rutinas (datos) ----------
- // rest = [mín, máx] en segundos; sirve para mostrar y, más adelante, para el timer.
- const ROUTINES = {
-  A: { name: 'Muscle-up · Potencia', blocks: [
-   { title: 'Técnica + piernas', rounds: 3, rest: [90, 150], items: [
-     { name: 'Muscle-up sin banda', reps: '2–3', cue: 'Transición limpia; evita el fallo.' },
-     { name: 'Sentadilla búlgara', reps: '8–10/lado' } ] },
-   { title: 'Fuerza', rounds: 3, rest: [60, 90], items: [
-     { name: 'Flexiones en anillas', reps: '8–12' },
-     { name: 'Peso muerto rumano', reps: '8–12' } ] },
-   { title: 'Complementarios', rounds: 2, rest: [60, 90], items: [
-     { name: 'Remo en anillas', reps: '8–12' },
-     { name: 'Elevación de piernas colgado', reps: '8–12' } ] } ] },
-  B: { name: 'Handstand · Empuje', blocks: [
-   { title: 'Técnica + piernas', rounds: 3, rest: [120, 150], items: [
-     { name: 'Negativas de HSPU', reps: '2–4', cue: 'Pared; descenso controlado 3–5 s.' },
-     { name: 'Sentadilla goblet', reps: '10–15' } ] },
-   { title: 'Fuerza', rounds: 3, rest: [75, 120], items: [
-     { name: 'Dominadas L-sit', reps: '5–8', cue: 'Mantén piernas elevadas; tuck si cedes.' },
-     { name: 'Peso muerto rumano unilateral', reps: '8–10/lado' } ] },
-   { title: 'Complementarios', rounds: 2, rest: [75, 120], items: [
-     { name: 'Fondos en paralelas', reps: '6–10' },
-     { name: 'Remo en anillas', reps: '8–12' } ] } ] },
-  C: { name: 'Front lever · Tracción', blocks: [
-   { title: 'Técnica + piernas', rounds: 3, rest: [90, 150], items: [
-     { name: 'Tuck front lever row', reps: '3–6', cue: 'Cadera alta; tronco estable.' },
-     { name: 'Zancadas inversas', reps: '8–10/lado' } ] },
-   { title: 'Fuerza', rounds: 3, rest: [90, 120], items: [
-     { name: 'Dominadas estrictas', reps: '6–10' },
-     { name: 'Fondos en paralelas', reps: '6–10' } ] },
-   { title: 'Complementarios', rounds: 2, rest: [60, 90], items: [
-     { name: 'Peso muerto rumano', reps: '8–12' },
-     { name: 'Pike push-ups', reps: '6–10' } ] } ] }
- };
+ const ROUTINES = window.ROUTINES;
  const KINDS = {
   A: { tag: 'A', cls: '' }, B: { tag: 'B', cls: '' }, C: { tag: 'C', cls: '' },
   walk: { tag: '🚶', cls: 'walk', label: 'Caminata', unit: 'min', ask: 'Minutos' },
@@ -281,11 +250,11 @@ details.card>summary{list-style:none;cursor:pointer}details.card>summary::-webki
   for (let i = 0; i < 7; i++) for (const e of log[dateKey(add(monday, i))] || []) {
    if (isRoutine(e.t)) routines++; else if (e.t === 'walk') walk += e.v; else run += e.v;
   }
+  $('trainSub').textContent = `Timer guiado · Siguiente: Rutina ${nextRoutine()}`;
   $('stats').innerHTML =
-   `<div class="stat hl"><small>Siguiente</small><b>Rutina ${nextRoutine()}</b></div>` +
-   `<div class="stat"><small>Rutinas esta semana</small><b>${routines}</b></div>` +
-   `<div class="stat"><small>Caminata esta semana</small><b>${num(walk)} min</b></div>` +
-   `<div class="stat"><small>Trote esta semana</small><b>${num(run)} km</b></div>`;
+   `<div class="stat"><small>Rutinas<br>esta semana</small><b>${routines}</b></div>` +
+   `<div class="stat"><small>Caminata<br>esta semana</small><b>${num(walk)} min</b></div>` +
+   `<div class="stat"><small>Trote<br>esta semana</small><b>${num(run)} km</b></div>`;
  }
 
  function renderCalendar() {

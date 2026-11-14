@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f7f8f7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mi Hub">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=2">
+<link rel="icon" type="image/png" href="icons/icon-192.png?v=2">
+<title>Entrenar · Mi Hub</title>
+<style>
+:root{color-scheme:light;--bg:#f7f8f7;--fg:#1b2526;--sub:#687577;--line:#e4e9e7;--brand:#276b62;--light:#e6f2ed;--pale:#eef5f2;--rest:#25609e;--restbg:#e3eefa;--warm:#9a5b0f;--warmbg:#fbefdc}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.48 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+button{font:inherit;cursor:pointer;color:inherit}
+main{max-width:560px;min-height:100%;margin:auto;padding:calc(env(safe-area-inset-top) + 14px) 16px calc(env(safe-area-inset-bottom) + 24px);display:flex;flex-direction:column}
+[hidden]{display:none!important}
+h1{font-size:25px;letter-spacing:-.8px;margin:0}
+.sub{color:var(--sub);font-size:13px}
+.back{display:inline-flex;align-items:center;gap:4px;color:var(--brand);text-decoration:none;font-weight:600;font-size:15px;margin-bottom:12px;align-self:flex-start}.back span{font-size:24px;line-height:1;margin-top:-2px}
+.label{font-size:11px;font-weight:800;color:var(--brand);text-transform:uppercase;letter-spacing:.8px;margin:22px 2px 8px}
+
+/* ----- Configuración ----- */
+.resume{margin-top:16px;background:var(--brand);color:#fff;border-radius:16px;padding:14px 15px}
+.resume b{display:block}.resume .sub{color:#cfe8e0}
+.resume .row{display:flex;gap:8px;margin-top:10px}
+.resume button{border:0;border-radius:10px;padding:8px 12px;font-weight:650}
+.resume .go{background:#fff;color:var(--brand)}.resume .drop{background:rgba(255,255,255,.15);color:#fff}
+.pick{display:grid;gap:8px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:15px;padding:12px 13px}
+.opt .id{width:34px;height:34px;border-radius:10px;background:var(--light);color:var(--brand);font-weight:800;font-size:16px;display:grid;place-items:center;flex-shrink:0}
+.opt b{display:block;font-size:15px}.opt .sub{font-size:12px}
+.opt .check{margin-left:auto;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);flex-shrink:0}
+.opt.on{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
+.opt.on .id{background:var(--brand);color:#fff}
+.opt.on .check{border:6px solid var(--brand)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);background:#eceff0;border-radius:12px;padding:3px;gap:3px}
+.seg button{border:0;background:transparent;border-radius:9px;padding:8px 4px;font-size:14px;font-weight:600;color:var(--sub)}
+.seg button.on{background:#fff;color:var(--fg);box-shadow:0 1px 3px #0001}
+.segnote{font-size:12px;color:var(--sub);margin:7px 3px 0}
+.summary{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:15px;padding:12px 14px;display:flex;justify-content:space-around;text-align:center}
+.summary b{display:block;font-size:19px;letter-spacing:-.4px}.summary small{color:var(--sub);font-size:11px}
+.startbtn{margin-top:auto;border:0;background:var(--brand);color:#fff;border-radius:16px;padding:16px;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px}
+.startwrap{margin-top:22px;display:flex;flex-direction:column;flex:1}
+.startbtn:active{filter:brightness(.92)}
+
+/* ----- Reproductor ----- */
+.ptop{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.quit{border:0;background:#eceff0;border-radius:10px;padding:7px 11px;font-size:14px;font-weight:600}
+.clock{font-variant-numeric:tabular-nums;font-weight:700;font-size:15px}
+.ptitle{font-size:13px;color:var(--sub);text-align:center;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{height:5px;background:#e4e9e7;border-radius:5px;margin:12px 0 0;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--brand);border-radius:5px;width:0;transition:width .3s}
+.stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px 4px}
+.phase{display:inline-block;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:5px 11px;border-radius:20px;background:var(--light);color:var(--brand)}
+.phase.rest{background:var(--restbg);color:var(--rest)}.phase.warm{background:var(--warmbg);color:var(--warm)}
+.where{font-size:13px;color:var(--sub);margin-top:8px;min-height:20px}
+.exname{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1.12;margin:18px 0 6px}
+.reps{font-size:46px;font-weight:800;letter-spacing:-1.5px;color:var(--brand);line-height:1.1}
+.cue{color:var(--sub);font-size:14px;margin-top:10px;max-width:320px}
+.stopwatch{margin-top:14px;font-variant-numeric:tabular-nums;color:var(--sub);font-size:14px}
+.ringwrap{position:relative;width:min(64vw,250px);aspect-ratio:1;margin:18px 0 6px}
+.ringwrap svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ringwrap circle{fill:none;stroke-width:9}
+.ringwrap .track{stroke:#e4e9e7}
+.ringwrap .prog{stroke:var(--brand);stroke-linecap:round;transition:stroke-dashoffset .25s linear}
+.ringwrap.rest .prog{stroke:var(--rest)}.ringwrap.warm .prog{stroke:var(--warm)}
+.ringtime{position:absolute;inset:0;display:grid;place-items:center;font-size:54px;font-weight:800;letter-spacing:-2px;font-variant-numeric:tabular-nums}
+.ringcap{font-size:15px;font-weight:650;margin-top:4px}
+.tips{margin:10px 0 0;padding:0;list-style:none;font-size:13px;color:var(--sub);line-height:1.6}
+.extra{margin-top:12px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 14px;font-size:14px;font-weight:650}
+.upnext{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-size:13px;color:var(--sub);text-align:left}
+.upnext b{color:var(--fg)}
+.controls{display:grid;grid-template-columns:64px 1fr 64px;gap:10px;margin-top:12px;align-items:center}
+.ctl{height:58px;border:0;border-radius:16px;background:#eceff0;font-size:20px;display:grid;place-items:center}
+.main-btn{height:64px;border:0;border-radius:18px;background:var(--brand);color:#fff;font-size:19px;font-weight:700}
+.main-btn:active,.ctl:active{filter:brightness(.92)}
+.main-btn.paused{background:#e7a33a}
+
+/* ----- Fin ----- */
+.done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px}
+.done .big{font-size:56px}
+.done h2{font-size:24px;letter-spacing:-.6px;margin:4px 0 0}
+.done .stats{display:flex;gap:26px;margin:14px 0 22px}
+.done .stats b{display:block;font-size:22px}.done .stats small{color:var(--sub);font-size:12px}
+.done .primary{border:0;background:var(--brand);color:#fff;border-radius:14px;padding:14px 20px;font-size:16px;font-weight:700;width:100%;max-width:320px}
+.done .primary:disabled{background:var(--light);color:var(--brand)}
+.done .secondary{color:var(--brand);text-decoration:none;font-weight:600;padding:12px}
+</style>
+</head>
+<body><main>
+
+<!-- ============ 1. Configuración ============ -->
+<section id="setup" style="display:flex;flex-direction:column;flex:1">
+  <a class="back" href="ejercicio.html"><span>‹</span> Ejercicio</a>
+  <h1>Entrenar</h1>
+  <div class="sub">Timer guiado: movilidad, ejercicios y descansos.</div>
+
+  <div class="resume" id="resume" hidden>
+    <b id="resumeTitle"></b><span class="sub" id="resumeSub"></span>
+    <div class="row"><button class="go" id="resumeGo">Continuar</button><button class="drop" id="resumeDrop">Descartar</button></div>
+  </div>
+
+  <div class="label">Rutina</div>
+  <div class="pick" id="pick"></div>
+
+  <div class="label">Volumen</div>
+  <div class="seg" id="seg">
+    <button data-mode="full">Completa</button><button data-mode="two">2 vueltas</button><button data-mode="short">Corta</button>
+  </div>
+  <div class="segnote" id="segnote"></div>
+
+  <div class="summary" id="summary"></div>
+
+  <div class="startwrap"><button class="startbtn" id="startBtn">▶ Empezar</button></div>
+</section>
+
+<!-- ============ 2. Reproductor ============ -->
+<section id="player" hidden style="display:flex;flex-direction:column;flex:1">
+  <div class="ptop"><button class="quit" id="quitBtn">✕ Salir</button><span class="ptitle" id="pTitle"></span><span class="clock" id="clock">0:00</span></div>
+  <div class="bar"><i id="barFill"></i></div>
+  <div class="stage" id="stage"></div>
+  <div class="upnext" id="upnext"></div>
+  <div class="controls">
+    <button class="ctl" id="prevBtn" aria-label="Paso anterior">⏮</button>
+    <button class="main-btn" id="mainBtn"></button>
+    <button class="ctl" id="skipBtn" aria-label="Saltar paso">⏭</button>
+  </div>
+</section>
+
+<!-- ============ 3. Fin ============ -->
+<section id="finish" hidden style="display:flex;flex-direction:column;flex:1">
+  <div class="done">
+    <div class="big">🎉</div>
+    <h2 id="doneTitle"></h2>
+    <div class="sub" id="doneSub"></div>
+    <div class="stats" id="doneStats"></div>
+    <button class="primary" id="logBtn"></button>
+    <a class="secondary" href="ejercicio.html">Volver a Ejercicio</a>
+  </div>
+</section>
+</main>
+
+<script src="routines.js"></script>
+<script>
+(() => {
+ const R = window.ROUTINES;
+ const $ = id => document.getElementById(id);
+ const WARMUP_SEC = 300;      // 5 min de movilidad / estiramiento activo
+ const TRANSITION_SEC = 20;   // entre ejercicio 1 y 2 (rango 15–30 s)
+ const EST_SET_SEC = 40;      // estimación de duración de una serie (solo para el resumen)
+ const MODES = {
+  full:  { note: 'Vueltas completas de cada bloque.' },
+  two:   { note: 'Primeras 2 semanas: 2 vueltas por bloque.' },
+  short: { note: 'Versión corta: solo bloques 01 y 02, 2 vueltas cada uno.' }
+ };
+ const LOG_KEY = 'workout-log-v1', SESSION_KEY = 'training-session-v1';
+
+ // ---------- utilidades ----------
+ const pad = n => String(n).padStart(2, '0');
+ const dateKey = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+ const mmss = s => { s = Math.max(0, Math.round(s)); return `${Math.floor(s / 60)}:${pad(s % 60)}`; };
+ const restSec = ([a, b]) => Math.round((a + b) / 2 / 5) * 5;   // punto medio del rango
+ const readLog = () => { try { return JSON.parse(localStorage.getItem(LOG_KEY)) || {}; } catch (e) { return {}; } };
+ function nextRoutine() {
+  const log = readLog();
+  for (const k of Object.keys(log).sort().reverse()) {
+   const r = (log[k] || []).filter(e => e && ['A', 'B', 'C'].includes(e.t));
+   if (r.length) return ({ A: 'B', B: 'C', C: 'A' })[r[r.length - 1].t];
+  }
+  return 'A';
+ }
+
+ // ---------- construir la secuencia de pasos ----------
+ function buildSteps(id, mode) {
+  const steps = [{ type: 'warm', dur: WARMUP_SEC }];
+  const blocks = mode === 'short' ? R[id].blocks.slice(0, 2) : R[id].blocks;
+  blocks.forEach((b, bi) => {
+   const rounds = mode === 'full' ? b.rounds : 2;
+   for (let r = 1; r <= rounds; r++) {
+    b.items.forEach((it, j) => {
+     const ctx = { bi, block: b, round: r, rounds };
+     steps.push({ type: 'ex', item: it, n: j + 1, ...ctx });
+     if (j < b.items.length - 1) steps.push({ type: 'trans', dur: TRANSITION_SEC, ...ctx });
+     else if (!(bi === blocks.length - 1 && r === rounds)) steps.push({ type: 'rest', dur: restSec(b.rest), range: b.rest, ...ctx });
+    });
+   }
+  });
+  return steps;
+ }
+ const nextEx = (steps, i) => steps.slice(i + 1).find(s => s.type === 'ex');
+
+ // ---------- configuración ----------
+ let choice = nextRoutine(), mode = 'full';
+ function renderSetup() {
+  const nx = nextRoutine();
+  $('pick').innerHTML = Object.entries(R).map(([id, r]) =>
+   `<button class="opt${id === choice ? ' on' : ''}" data-id="${id}"><span class="id">${id}</span><span><b>${r.name}</b><span class="sub">${id === nx ? 'Siguiente en la rotación' : r.blocks.map(b => b.items[0].name).slice(0, 2).join(' · ')}</span></span><span class="check"></span></button>`).join('');
+  document.querySelectorAll('#seg button').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
+  $('segnote').textContent = MODES[mode].note;
+  const steps = buildSteps(choice, mode);
+  const sets = steps.filter(s => s.type === 'ex').length;
+  const est = steps.reduce((t, s) => t + (s.type === 'ex' ? EST_SET_SEC : s.dur), 0);
+  const blocks = mode === 'short' ? 2 : R[choice].blocks.length;
+  $('summary').innerHTML = `<div><b>${blocks}</b><small>bloques</small></div><div><b>${sets}</b><small>series</small></div><div><b>~${Math.round(est / 60)} min</b><small>estimado</small></div>`;
+ }
+ $('pick').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) { choice = b.dataset.id; renderSetup(); } });
+ $('seg').addEventListener('click', e => { const b = e.target.closest('[data-mode]'); if (b) { mode = b.dataset.mode; renderSetup(); } });
+
+ // ---------- sonido y pantalla encendida ----------
+ let audio = null;
+ function initAudio() {
+  try {
+   if (navigator.audioSession) navigator.audioSession.type = 'ambient';   // se mezcla con tu música
+   audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+   if (audio.state === 'suspended') audio.resume();
+  } catch (e) { audio = null; }
+ }
+ function beep(freq = 880, ms = 140, vol = .25) {
+  if (!audio) return;
+  try {
+   const o = audio.createOscillator(), g = audio.createGain(), t = audio.currentTime;
+   o.frequency.value = freq; o.type = 'sine';
+   g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.001, t + ms / 1000);
+   o.connect(g).connect(audio.destination); o.start(t); o.stop(t + ms / 1000 + .02);
+  } catch (e) {}
+ }
+ const endBeep = () => { beep(988, 180, .3); setTimeout(() => beep(1319, 260, .3), 190); };
+ let wakeLock = null;
+ async function keepAwake() { try { if ('wakeLock' in navigator && !wakeLock) { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', () => wakeLock = null); } } catch (e) {} }
+ function releaseAwake() { try { wakeLock && wakeLock.release(); } catch (e) {} wakeLock = null; }
+
+ // ---------- reproductor ----------
+ let S = null, timer = null;   // S = sesión en curso
+ const now = () => Date.now();
+ function show(id) { ['setup', 'player', 'finish'].forEach(s => $(s).hidden = s !== id); window.scrollTo(0, 0); }
+
+ function start(id, md, idx = 0, startedAt = now(), pausedMs = 0) {
+  initAudio(); keepAwake();
+  S = { id, mode: md, steps: buildSteps(id, md), idx, startedAt, pausedMs, pausedAt: null };
+  show('player');
+  enter(idx);
+  clearInterval(timer); timer = setInterval(tick, 200);
+ }
+ function enter(i) {
+  S.idx = i;
+  const st = S.steps[i];
+  if (!st) return finish();
+  S.stepStart = now();
+  S.endAt = st.dur ? now() + st.dur * 1000 : null;
+  S.lastBeep = null;
+  if (S.pausedAt) { S.pausedMs += now() - S.pausedAt; S.pausedAt = null; }
+  save();
+  draw();
+ }
+ function elapsed() { return (S.pausedAt || now()) - S.startedAt - S.pausedMs; }
+
+ function tick() {
+  if (!S || S.pausedAt) return;
+  const st = S.steps[S.idx];
+  $('clock').textContent = mmss(elapsed() / 1000);
+  if (st.type === 'ex') { const sw = $('sw'); if (sw) sw.textContent = mmss((now() - S.stepStart) / 1000); return; }
+  const left = (S.endAt - now()) / 1000;
+  updateRing(left, st.dur);
+  const sec = Math.ceil(left);
+  if (sec <= 3 && sec >= 1 && S.lastBeep !== sec) { S.lastBeep = sec; beep(); }
+  if (left <= 0) { endBeep(); enter(S.idx + 1); }
+ }
+
+ function updateRing(left, dur) {
+  const t = $('ringTime'), p = $('ringProg'); if (!t || !p) return;
+  t.textContent = mmss(Math.ceil(Math.max(0, left)));
+  p.style.strokeDashoffset = String(565.5 * (1 - Math.max(0, Math.min(1, left / dur))));
+ }
+
+ function where(st) { return `Bloque 0${st.bi + 1} · ${st.block.title} · Vuelta ${st.round}/${st.rounds}`; }
+ function ring(cls) {
+  return `<div class="ringwrap ${cls}"><svg viewBox="0 0 200 200"><circle class="track" cx="100" cy="100" r="90"/><circle class="prog" id="ringProg" cx="100" cy="100" r="90" stroke-dasharray="565.5" stroke-dashoffset="0"/></svg><div class="ringtime" id="ringTime"></div></div>`;
+ }
+
+ function draw() {
+  const st = S.steps[S.idx], total = S.steps.length;
+  $('pTitle').textContent = `Rutina ${S.id} · ${R[S.id].name}`;
+  $('barFill').style.width = `${(S.idx / total) * 100}%`;
+  $('clock').textContent = mmss(elapsed() / 1000);
+  const nx = nextEx(S.steps, S.idx);
+  // En la transición el siguiente ejercicio ya se muestra en grande; abajo va el que sigue después.
+  const later = st.type === 'trans' && nx ? nextEx(S.steps, S.steps.indexOf(nx)) : nx;
+  $('upnext').innerHTML = later ? `Después: <b>${later.item.name}</b> · ${later.item.reps}` : 'Después: <b>¡fin de la rutina!</b>';
+  $('prevBtn').disabled = S.idx === 0;
+  let html = '';
+  if (st.type === 'warm') {
+   html = `<span class="phase warm">Calentamiento</span><div class="where">Movilidad / estiramiento activo</div>${ring('warm')}` +
+    `<ul class="tips"><li>Círculos de hombros, brazos y cadera</li><li>Gato-vaca y rotaciones de tronco</li><li>Sentadilla profunda y zancadas suaves</li><li>Series de aproximación del primer ejercicio</li></ul>`;
+  } else if (st.type === 'ex') {
+   html = `<span class="phase">Ejercicio ${st.n} de ${st.block.items.length}</span><div class="where">${where(st)}</div>` +
+    `<div class="exname">${st.item.name}</div><div class="reps">${st.item.reps}</div>` +
+    (st.item.cue ? `<div class="cue">${st.item.cue}</div>` : '') + `<div class="stopwatch">⏱ <span id="sw">0:00</span></div>`;
+  } else if (st.type === 'trans') {
+   html = `<span class="phase rest">Transición</span><div class="where">${where(st)}</div>${ring('rest')}<div class="sub">Prepárate para</div><div class="ringcap">${nx ? `${nx.item.name} · ${nx.item.reps}` : ''}</div>`;
+  } else if (st.type === 'rest') {
+   html = `<span class="phase rest">Descanso</span><div class="where">${where(st)}</div>${ring('rest')}` +
+    `<div class="sub">Rango sugerido ${st.range[0]}–${st.range[1]} s</div><button class="extra" id="plus15">+15 s</button>`;
+  }
+  $('stage').innerHTML = html;
+  const mb = $('mainBtn');
+  mb.classList.toggle('paused', !!S.pausedAt);
+  mb.textContent = st.type === 'ex' ? '✓ Listo' : S.pausedAt ? '▶ Reanudar' : '⏸ Pausa';
+  if (st.dur) updateRing(S.pausedAt ? (S.endAt - S.pausedAt) / 1000 : (S.endAt - now()) / 1000, st.dur);
+  const p = $('plus15'); if (p) p.onclick = () => { S.endAt += 15000; st.dur += 15; tick(); };
+ }
+
+ $('mainBtn').addEventListener('click', () => {
+  initAudio();
+  const st = S.steps[S.idx];
+  if (st.type === 'ex') { beep(660, 90, .2); return enter(S.idx + 1); }
+  if (S.pausedAt) { const d = now() - S.pausedAt; S.endAt += d; S.pausedMs += d; S.pausedAt = null; keepAwake(); }
+  else S.pausedAt = now();
+  draw(); save();
+ });
+ $('skipBtn').addEventListener('click', () => enter(S.idx + 1));
+ $('prevBtn').addEventListener('click', () => { if (S.idx > 0) enter(S.idx - 1); });
+ $('quitBtn').addEventListener('click', () => {
+  if (!confirm('¿Salir del entrenamiento? Podrás continuarlo más tarde desde esta página.')) return;
+  clearInterval(timer); releaseAwake(); S = null; show('setup'); renderSetup(); checkResume();
+ });
+
+ // ---------- fin ----------
+ function finish() {
+  clearInterval(timer); releaseAwake();
+  const mins = Math.round(elapsed() / 60000), sets = S.steps.filter(s => s.type === 'ex').length, id = S.id;
+  localStorage.removeItem(SESSION_KEY);
+  $('doneTitle').textContent = `¡Rutina ${id} completada!`;
+  $('doneSub').textContent = R[id].name;
+  $('doneStats').innerHTML = `<div><b>${mins} min</b><small>duración</small></div><div><b>${sets}</b><small>series</small></div>`;
+  const already = (readLog()[dateKey(new Date())] || []).some(e => e && e.t === id);
+  const lb = $('logBtn');
+  lb.disabled = already; lb.textContent = already ? '✓ Ya está registrada hoy' : 'Registrar en el calendario';
+  lb.onclick = () => {
+   const log = readLog(), k = dateKey(new Date());
+   (log[k] = Array.isArray(log[k]) ? log[k] : []).push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), t: id });
+   try { localStorage.setItem(LOG_KEY, JSON.stringify(log)); lb.disabled = true; lb.textContent = '✓ Registrada'; } catch (e) { alert('No se pudo guardar.'); }
+  };
+  endBeep();
+  S = null;
+  show('finish');
+ }
+
+ // ---------- guardar / continuar ----------
+ function save() {
+  if (!S) return;
+  try { localStorage.setItem(SESSION_KEY, JSON.stringify({ id: S.id, mode: S.mode, idx: S.idx, startedAt: S.startedAt, pausedMs: S.pausedMs + (S.pausedAt ? now() - S.pausedAt : 0), savedAt: now() })); } catch (e) {}
+ }
+ function checkResume() {
+  let s = null;
+  try { s = JSON.parse(localStorage.getItem(SESSION_KEY)); } catch (e) {}
+  if (!s || !R[s.id] || !MODES[s.mode] || now() - s.savedAt > 4 * 3600e3) { localStorage.removeItem(SESSION_KEY); $('resume').hidden = true; return; }
+  const total = buildSteps(s.id, s.mode).length;
+  $('resumeTitle').textContent = `Entrenamiento en curso · Rutina ${s.id}`;
+  $('resumeSub').textContent = `Paso ${s.idx + 1} de ${total}`;
+  $('resume').hidden = false;
+  $('resumeGo').onclick = () => start(s.id, s.mode, Math.min(s.idx, total - 1), s.startedAt, s.pausedMs + (now() - s.savedAt));
+  $('resumeDrop').onclick = () => { localStorage.removeItem(SESSION_KEY); $('resume').hidden = true; };
+ }
+
+ $('startBtn').addEventListener('click', () => start(choice, mode));
+ document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && S) { keepAwake(); tick(); } });
+
+ renderSetup();
+ checkResume();
+ if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+})();
+</script>
+</body></html>
