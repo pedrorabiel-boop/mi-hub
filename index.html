@@ -81,7 +81,7 @@ h1{font-size:30px;letter-spacing:-1px;line-height:1.1;margin:0}
       const n = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(y, m - 1, d)) / 86400000);
       const when = n === 0 ? 'hoy' : n === 1 ? 'ayer' : `hace ${n} días`;
       const fmt = v => Number(v).toLocaleString('es-CL', {maximumFractionDigits: 2});
-      const what = e.t === 'walk' ? `Caminata ${fmt(e.v)} min` : e.t === 'run' ? `Trote ${fmt(e.v)} km` : ['A', 'B', 'C'].includes(e.t) ? `Rutina ${e.t}` : null;
+      const what = e.t === 'walk' ? `Caminata ${fmt(e.v)} min` : e.t === 'run' ? `Trote ${fmt(e.v)} km` : ['A', 'B', 'C'].includes(e.t) ? `Rutina ${e.t}` : e.t === 'other' && e.text ? (e.text.length > 32 ? e.text.slice(0, 31).trim() + '…' : e.text) : null;
       if (what) document.getElementById('workoutInfo').textContent = `Último: ${what} · ${when}`;
     }
   } catch (e) {}

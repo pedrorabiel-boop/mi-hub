@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="icons/icon-192.png?v=2">
 <title>Ejercicio · Mi Hub</title>
 <style>
-:root{color-scheme:light;--bg:#f7f8f7;--fg:#1b2526;--sub:#687577;--line:#e4e9e7;--brand:#276b62;--light:#e6f2ed;--pale:#eef5f2;--walk:#9a5b0f;--walkbg:#fbefdc;--run:#25609e;--runbg:#e3eefa}
+:root{color-scheme:light;--bg:#f7f8f7;--fg:#1b2526;--sub:#687577;--line:#e4e9e7;--brand:#276b62;--light:#e6f2ed;--pale:#eef5f2;--walk:#9a5b0f;--walkbg:#fbefdc;--run:#25609e;--runbg:#e3eefa;--other:#6b4a9e;--otherbg:#efe8f9}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.48 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
 button,input{font:inherit}button{cursor:pointer;color:inherit}
@@ -47,7 +47,7 @@ h1{font-size:25px;letter-spacing:-.8px;margin:0}h2{font-size:17px;margin:0}
 .daynum{font-size:13px;font-weight:550}
 .marks{display:flex;flex-wrap:wrap;gap:2px;min-height:14px}
 .tag{display:inline-grid;place-items:center;min-width:14px;height:14px;padding:0 2px;border-radius:4px;font-size:9px;font-weight:800;line-height:1;background:var(--light);color:var(--brand)}
-.tag.walk{background:var(--walkbg);color:var(--walk)}.tag.run{background:var(--runbg);color:var(--run)}
+.tag.walk{background:var(--walkbg);color:var(--walk)}.tag.run{background:var(--runbg);color:var(--run)}.tag.other{background:var(--otherbg);color:var(--other)}
 .day:not(.active) .tag{opacity:.55}
 .day.selected .tag{background:rgba(255,255,255,.92)}
 .legend{margin:10px 4px 0;font-size:12px;color:var(--sub);display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center}
@@ -62,13 +62,13 @@ h1{font-size:25px;letter-spacing:-.8px;margin:0}h2{font-size:17px;margin:0}
 .entry .tag{min-width:30px;height:30px;border-radius:9px;font-size:14px}
 .entry b{font-weight:650;font-size:14px;display:block}
 .entry .sub{font-size:12px}
+.entry>div{min-width:0;overflow-wrap:anywhere}.entry .tag{flex-shrink:0}
 .del{margin-left:auto;border:0;background:#f4f6f5;border-radius:9px;width:32px;height:32px;font-size:18px;color:var(--sub);flex-shrink:0}
 .off{padding:2px 18px 12px;color:var(--sub);font-size:14px}
 .add{border-top:1px solid var(--line);padding:13px 12px 14px;margin-top:4px}
 .addlabel{font-size:11px;font-weight:800;color:var(--brand);text-transform:uppercase;letter-spacing:.7px;margin:0 2px 9px}
 .addgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
 .addbtn{grid-column:span 2;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 6px;font-weight:650;font-size:14px;display:flex;align-items:center;justify-content:center;gap:6px}
-.addbtn.wide{grid-column:span 3}
 .addbtn:active{background:var(--pale)}
 .addbtn .tag{min-width:20px;height:20px;font-size:11px;border-radius:6px}
 .qty{display:none;align-items:center;gap:8px;margin-top:10px;background:var(--pale);border-radius:12px;padding:10px}
@@ -78,6 +78,7 @@ h1{font-size:25px;letter-spacing:-.8px;margin:0}h2{font-size:17px;margin:0}
 .qty .unit{color:var(--sub);font-size:14px}
 .qty .save{margin-left:auto;border:0;background:var(--brand);color:#fff;border-radius:10px;padding:8px 12px;font-weight:650}
 .qty .cancel{border:0;background:transparent;color:var(--sub);padding:8px 4px}
+.qty{flex-wrap:wrap}.qty label{width:100%}.qty .cancel{margin-left:auto}.qty .save{margin-left:0}.qty.text input{width:100%}.qty.text .unit{display:none}
 
 /* Rutinas */
 .sectionhead{margin:30px 2px 4px;display:flex;align-items:baseline;justify-content:space-between;gap:10px}
@@ -133,7 +134,7 @@ details.card>summary{list-style:none;cursor:pointer}details.card>summary::-webki
   <div class="weekdays"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
   <div class="calendar" id="calendar"></div>
 </div>
-<div class="legend"><span><i class="tag">A</i>Rutina</span><span><i class="tag walk">🚶</i>Caminata</span><span><i class="tag run">🏃</i>Trote</span><span>Toca un día para registrar.</span></div>
+<div class="legend"><span><i class="tag">A</i>Rutina</span><span><i class="tag walk">🚶</i>Caminata</span><span><i class="tag run">🏃</i>Trote</span><span><i class="tag other">✏️</i>Otra</span><span>Toca un día para registrar.</span></div>
 
 <div class="panel details">
   <div class="detailshead"><div><h2 id="dayTitle"></h2><div class="sub" id="dayMeta"></div></div><span class="chip" id="dayChip"></span></div>
@@ -144,8 +145,9 @@ details.card>summary{list-style:none;cursor:pointer}details.card>summary::-webki
       <button class="addbtn" data-add="A"><i class="tag">A</i>Rutina A</button>
       <button class="addbtn" data-add="B"><i class="tag">B</i>Rutina B</button>
       <button class="addbtn" data-add="C"><i class="tag">C</i>Rutina C</button>
-      <button class="addbtn wide" data-add="walk"><i class="tag walk">🚶</i>Caminata</button>
-      <button class="addbtn wide" data-add="run"><i class="tag run">🏃</i>Trote</button>
+      <button class="addbtn" data-add="walk"><i class="tag walk">🚶</i>Caminata</button>
+      <button class="addbtn" data-add="run"><i class="tag run">🏃</i>Trote</button>
+      <button class="addbtn" data-add="other"><i class="tag other">✏️</i>Otra</button>
     </div>
     <form class="qty" id="qtyForm" autocomplete="off">
       <label for="qtyInput" id="qtyLabel"></label>
@@ -183,8 +185,12 @@ details.card>summary{list-style:none;cursor:pointer}details.card>summary::-webki
  const KINDS = {
   A: { tag: 'A', cls: '' }, B: { tag: 'B', cls: '' }, C: { tag: 'C', cls: '' },
   walk: { tag: '🚶', cls: 'walk', label: 'Caminata', unit: 'min', ask: 'Minutos' },
-  run: { tag: '🏃', cls: 'run', label: 'Trote', unit: 'km', ask: 'Distancia' }
+  run: { tag: '🏃', cls: 'run', label: 'Trote', unit: 'km', ask: 'Distancia' },
+  other: { tag: '✏️', cls: 'other', ask: '¿Qué hiciste?' }   // texto libre, en e.text
  };
+ const TEXT_MAX = 120;
+ const esc = s => String(s).replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
+ const cleanText = s => typeof s === 'string' ? s.replace(/\s+/g, ' ').trim().slice(0, TEXT_MAX) : '';
  const isRoutine = t => t === 'A' || t === 'B' || t === 'C';
 
  // ---------- Fechas ----------
@@ -206,8 +212,8 @@ details.card>summary{list-style:none;cursor:pointer}details.card>summary::-webki
   if (!obj || typeof obj !== 'object') return out;
   for (const [k, list] of Object.entries(obj)) {
    if (!/^\d{4}-\d\d-\d\d$/.test(k) || !Array.isArray(list)) continue;
-   const ok = list.filter(e => e && KINDS[e.t] && typeof e.id === 'string' && (isRoutine(e.t) || (typeof e.v === 'number' && e.v > 0 && e.v < 10000)))
-                  .map(e => isRoutine(e.t) ? { id: e.id.slice(0, 40), t: e.t } : { id: e.id.slice(0, 40), t: e.t, v: e.v });
+   const ok = list.filter(e => e && KINDS[e.t] && typeof e.id === 'string' && (isRoutine(e.t) || (e.t === 'other' ? cleanText(e.text) : typeof e.v === 'number' && e.v > 0 && e.v < 10000)))
+                  .map(e => ({ id: e.id.slice(0, 40), t: e.t, ...(e.t === 'other' ? { text: cleanText(e.text) } : isRoutine(e.t) ? {} : { v: e.v }) }));
    if (ok.length) out[k] = ok;
   }
   return out;
@@ -216,9 +222,9 @@ details.card>summary{list-style:none;cursor:pointer}details.card>summary::-webki
  try { log = clean(JSON.parse(localStorage.getItem(KEY))); } catch (e) {}
  const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(log)); } catch (e) { alert('No se pudo guardar el registro.'); } };
  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
- function addEntry(d, t, v) {
+ function addEntry(d, t, extra = {}) {
   const k = dateKey(d);
-  (log[k] = log[k] || []).push(v == null ? { id: uid(), t } : { id: uid(), t, v });
+  (log[k] = log[k] || []).push({ id: uid(), t, ...extra });
   persist(); render();
  }
  function removeEntry(k, id) {
@@ -236,6 +242,7 @@ details.card>summary{list-style:none;cursor:pointer}details.card>summary::-webki
 
  function describe(e) {
   if (isRoutine(e.t)) return { title: `Rutina ${e.t}`, sub: ROUTINES[e.t].name };
+  if (e.t === 'other') return { title: esc(e.text), sub: '' };
   const k = KINDS[e.t];
   return { title: `${k.label} · ${num(e.v)} ${k.unit}`, sub: '' };
  }
@@ -248,7 +255,7 @@ details.card>summary{list-style:none;cursor:pointer}details.card>summary::-webki
   const t = today(), monday = add(t, -((t.getDay() + 6) % 7));
   let routines = 0, walk = 0, run = 0;
   for (let i = 0; i < 7; i++) for (const e of log[dateKey(add(monday, i))] || []) {
-   if (isRoutine(e.t)) routines++; else if (e.t === 'walk') walk += e.v; else run += e.v;
+   if (e.t === 'walk') walk += e.v; else if (e.t === 'run') run += e.v; else routines++;   // A/B/C y texto libre
   }
   $('trainSub').textContent = `Timer guiado · Siguiente: Rutina ${nextRoutine()}`;
   $('stats').innerHTML =
@@ -288,7 +295,7 @@ details.card>summary{list-style:none;cursor:pointer}details.card>summary::-webki
   $('dayMeta').textContent = cap(rel(selected));
   $('dayChip').textContent = list.length ? `${list.length} registro${list.length > 1 ? 's' : ''}` : future ? 'Día futuro' : 'Descanso';
   $('entries').innerHTML = list.length
-   ? list.map(e => { const d = describe(e); return `<div class="entry"><i class="tag ${KINDS[e.t].cls}">${KINDS[e.t].tag}</i><div><b>${d.title}</b>${d.sub ? `<div class="sub">${d.sub}</div>` : ''}</div><button class="del" data-del="${e.id}" aria-label="Eliminar ${d.title}">×</button></div>`; }).join('')
+   ? list.map(e => { const d = describe(e); return `<div class="entry"><i class="tag ${KINDS[e.t].cls}">${KINDS[e.t].tag}</i><div><b>${d.title}</b>${d.sub ? `<div class="sub">${d.sub}</div>` : ''}</div><button class="del" data-del="${esc(e.id)}" aria-label="Eliminar ${d.title}">×</button></div>`; }).join('')
    : `<div class="off">${future ? 'No se puede registrar en días futuros.' : 'Sin entrenamientos registrados.'}</div>`;
   $('addArea').hidden = future;
  }
@@ -317,27 +324,35 @@ details.card>summary{list-style:none;cursor:pointer}details.card>summary::-webki
 
  function render() { renderStats(); renderCalendar(); renderDay(); renderRoutines(); }
 
- // ---------- Formulario de caminata / trote ----------
+ // ---------- Formulario de caminata / trote / texto libre ----------
  let pending = null;
  const form = $('qtyForm'), input = $('qtyInput');
  function showQty(t) {
   pending = t;
   const k = KINDS[t];
   $('qtyLabel').textContent = `${k.tag} ${k.ask}`;
-  $('qtyUnit').textContent = k.unit;
+  $('qtyUnit').textContent = k.unit || '';
+  form.classList.toggle('text', t === 'other');
   input.value = '';
-  input.inputMode = t === 'run' ? 'decimal' : 'numeric';
-  input.placeholder = t === 'run' ? '5' : '30';
+  input.inputMode = { run: 'decimal', walk: 'numeric', other: 'text' }[t];
+  input.placeholder = { run: '5', walk: '30', other: 'Ej: Yoga 40 min, natación, pesas…' }[t];
+  input.maxLength = t === 'other' ? TEXT_MAX : 10;
   form.classList.add('show');
   input.focus();
  }
  function hideQty() { pending = null; form.classList.remove('show'); }
  form.addEventListener('submit', ev => {
   ev.preventDefault();
+  if (pending === 'other') {
+   const text = cleanText(input.value);
+   if (!text) { input.focus(); return; }
+   hideQty(); addEntry(selected, 'other', { text });
+   return;
+  }
   const v = parseFloat(input.value.replace(',', '.'));
   if (!pending || !(v > 0) || v >= 10000) { input.focus(); return; }
   const t = pending; hideQty();
-  addEntry(selected, t, Math.round(v * 100) / 100);
+  addEntry(selected, t, { v: Math.round(v * 100) / 100 });
  });
  $('qtyCancel').addEventListener('click', hideQty);
 
